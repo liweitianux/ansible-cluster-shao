@@ -1,0 +1,8 @@
+---
+lan_net: 192.168.0.0/24
+master_lan_ip: 192.168.0.151
+master_lan_if:
+  - em1
+  - em2
+master_public_if:
+  - em4

@@ -1,0 +1,47 @@
+---
+- name: Firewall - disable firewall on nodes
+  service:
+    name: firewalld
+    state: stopped
+    enabled: false
+  when: cluster_role == "node"
+
+- name: Firewall - enable firewall on master
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+  when: cluster_role == "master"
+
+# Credits:
+# * https://github.com/firewalld/firewalld/issues/195#issuecomment-273018994
+# * https://bugzilla.redhat.com/show_bug.cgi?id=1381314#c46
+- name: Network - change interface zone (trusted)
+  command: nmcli connection modify {{ item }} connection.zone trusted
+  with_items: "{{ master_lan_if }}"
+  when: cluster_role == "master"
+
+- name: Network - change interface zone (public)
+  command: nmcli connection modify {{ item }} connection.zone public
+  with_items: "{{ master_public_if }}"
+  when: cluster_role == "master"
+
+- name: Firewall - setup trusted zone
+  firewalld:
+    zone: trusted
+    interface: "{{ item }}"
+    permanent: true
+    state: enabled
+  with_items: "{{ master_lan_if }}"
+  when: cluster_role == "master"
+  notify: firewalld-reload
+
+- name: Firewall - setup public zone
+  firewalld:
+    zone: public
+    interface: "{{ item }}"
+    permanent: true
+    state: enabled
+  with_items: "{{ master_public_if }}"
+  when: cluster_role == "master"
+  notify: firewalld-reload
