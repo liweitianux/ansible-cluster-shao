@@ -41,4 +41,6 @@ root# service sshd restart</code></pre>
 <ol start="6" style="list-style-type: decimal">
 <li>Test Ansible connection from the control machine:</li>
 </ol>
-<pre><code>control$ ansible -m ping master</code></pre>
+<pre><code>control$ ansible master -m ping
+control$ ansible master -m command -a whoami
+control$ ansible master -m command -a whoami -b</code></pre>

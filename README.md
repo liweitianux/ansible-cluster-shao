@@ -65,6 +65,8 @@ root# service sshd restart
 6. Test Ansible connection from the control machine:
 
 ```
-control$ ansible -m ping master
+control$ ansible master -m ping
+control$ ansible master -m command -a whoami
+control$ ansible master -m command -a whoami -b
 ```
 
