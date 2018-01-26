@@ -19,7 +19,7 @@
   yum:
     name: epel-release
     state: present
-  notify: update yum cache
+  notify: yum-update-cache
 
 - name: Check if rpmfusion-free-release is installed
   yum:
@@ -33,7 +33,7 @@
     name: "https://download1.rpmfusion.org/free/el/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
     state: present
     disable_gpg_check: true
-  when: pkg.results[0].yumstate != "installed"
+  when: (pkg.results|length == 0) or (pkg.results[0].yumstate != "installed")
 
 - name: Check if rpmfusion-nonfree-release is installed
   yum:
@@ -45,7 +45,7 @@
     name: "https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
     state: present
     disable_gpg_check: true
-  when: pkg.results[0].yumstate != "installed"
+  when: (pkg.results|length == 0) or (pkg.results[0].yumstate != "installed")
 
 - name: Check if yum.repos.d.bak exists
   stat:
@@ -63,18 +63,18 @@
 
 - name: Yum - re-create repositories from templates (base)
   template:
-    src: "{{ cluster_role }}-base.repo.j2"
-    dest: "/etc/yum.repos.d/{{ cluster_role }}-base.repo"
+    src: base.repo.j2
+    dest: /etc/yum.repos.d/base.repo
   notify: yum-update-cache
 
 - name: Yum - re-create repositories from templates (epel)
   template:
-    src: "{{ cluster_role }}-epel.repo.j2"
-    dest: "/etc/yum.repos.d/{{ cluster_role }}-epel.repo"
+    src: epel.repo.j2
+    dest: /etc/yum.repos.d/epel.repo
   notify: yum-update-cache
 
 - name: Yum - re-create repositories from templates (rpmfusion)
   template:
-    src: "{{ cluster_role }}-rpmfusion.repo.j2"
-    dest: "/etc/yum.repos.d/{{ cluster_role }}-rpmfusion.repo"
+    src: rpmfusion.repo.j2
+    dest: /etc/yum.repos.d/rpmfusion.repo
   notify: yum-update-cache
