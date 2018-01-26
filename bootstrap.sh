@@ -24,8 +24,13 @@ if [ -f "${SSHKEY}" ]; then
 else
     ssh-keygen -t ed25519 -C "ansible@master" -f "${SSHKEY}" -N ""
     echo "Generated SSH key for master: ${SSHKEY}"
-    ansible-playbook "${PLAYBOOK}" -v --diff \
-        --extra-vars "bootstrap_host=master"
+    ansible-playbook \
+        --verbose --diff \
+        --ask-pass --ask-become-pass \
+        --extra-vars "bootstrap_host=master" \
+        "${PLAYBOOK}"
+    echo "Bootstrapped the master machine!"
+    ansible master -m ping
 fi
 
 #
@@ -39,6 +44,11 @@ if [ -f "${SSHKEY}" ]; then
 else
     ssh-keygen -t ed25519 -C "ansible@nodes" -f "${SSHKEY}" -N ""
     echo "Generated SSH key for nodes: ${SSHKEY}"
-    ansible-playbook "${PLAYBOOK}" -v --diff
+    ansible-playbook \
+        --verbose --diff \
+        --ask-pass --ask-become-pass \
+        "${PLAYBOOK}"
+    echo "Bootstrapped the nodes!"
+    ansible nodes -m ping
 fi
 
