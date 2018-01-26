@@ -1,16 +1,25 @@
 ---
-- debug: var=hosts
-- debug: var=ansible_fqdn
-- debug: var=ansible_user_id
+- debug: var=ansible_play_hosts
 - debug: var=deploy_user
 - debug: var=ansible_ssh_private_key_file
 - debug: var=ansible_ssh_public_key_file
+
+- name: SSH - scan and add hosts
+  delegate_to: localhost
+  become: false
+  lineinfile:
+    path: "~/.ssh/known_hosts"
+    create: true
+    state: present
+    regexp: "^{{ item }}"
+    line: "{{ lookup('pipe', 'ssh-keyscan -t ed25519 '+item) }}"
+  with_items: "{{ ansible_play_hosts }}"
 
 - name: Create deployment user account
   user:
     name: "{{ deploy_user }}"
     state: present
-    createhome: yes
+    createhome: true
 
 - name: SSH - authorized_keys for the deployment user
   authorized_key:
@@ -33,7 +42,7 @@
     block: |
       Match User {{ deploy_user }}
           PasswordAuthentication no
-    backup: True
+    backup: true
     validate: "sshd -t -f %s"
   notify: Restart sshd
 
