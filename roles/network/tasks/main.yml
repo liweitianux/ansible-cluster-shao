@@ -1,0 +1,6 @@
+---
+- name: copy /etc/hosts from master
+  copy:
+    src: /etc/hosts
+    dest: /etc/hosts
+    backup: true
