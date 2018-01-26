@@ -1,0 +1,11 @@
+---
+- name: Setup the nodes machines ...
+  hosts: nodes
+  become: true
+
+  roles:
+    - network
+    - firewall
+    - yum
+
+# vim: set ft=yaml sw=2: #
