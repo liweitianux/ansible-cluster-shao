@@ -1,0 +1,54 @@
+---
+- debug: var=hosts
+- debug: var=ansible_fqdn
+- debug: var=ansible_user_id
+- debug: var=deploy_user
+- debug: var=ansible_ssh_private_key_file
+- debug: var=ansible_ssh_public_key_file
+
+- name: Create deployment user account
+  user:
+    name: "{{ deploy_user }}"
+    state: present
+    createhome: yes
+
+- name: SSH - authorized_keys for the deployment user
+  authorized_key:
+    user: "{{ deploy_user }}"
+    state: present
+    key: "{{ lookup('file', item) }}"
+  with_items:
+    - "{{ ansible_ssh_public_key_file }}"
+
+- name: sudo - no password for the deployment user
+  template:
+    src: etc_sudoers.d_ansible.j2
+    dest: /etc/sudoers.d/ansible
+    mode: 0440
+    validate: "visudo -cf %s"
+
+- name: SSH - disable password auth for the deployment user
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    block: |
+      Match User {{ deploy_user }}
+          PasswordAuthentication no
+    backup: True
+    validate: "sshd -t -f %s"
+  notify: Restart sshd
+
+- name: SSH - disable empty password login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PermitEmptyPasswords"
+    line: "PermitEmptyPasswords no"
+    validate: "sshd -t -f %s"
+  notify: Restart sshd
+
+- name: SSH - disable root login login by password
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PermitRootLogin"
+    line: "PermitRootLogin without-password"
+    validate: "sshd -t -f %s"
+  notify: Restart sshd
