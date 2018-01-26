@@ -4,6 +4,8 @@
   become: true
 
   roles:
+    - firewall
     - yum
+    - nginx
 
 # vim: set ft=yaml sw=2: #

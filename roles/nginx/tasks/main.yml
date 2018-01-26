@@ -1,0 +1,11 @@
+---
+- name: nginx - install package
+  yum:
+    name: nginx
+    state: latest
+
+- name: nginx - copy config for repo proxy
+  copy:
+    src: repo-proxy.conf
+    dest: /etc/nginx/conf.d/repo-proxy.conf
+  notify: nginx-restart
