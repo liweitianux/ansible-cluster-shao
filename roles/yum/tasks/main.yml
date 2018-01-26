@@ -61,20 +61,13 @@
     path: /etc/yum.repos.d
     state: directory
 
-- name: Yum - re-create repositories from templates (base)
+- name: Yum - re-create repositories from templates
   template:
-    src: base.repo.j2
-    dest: /etc/yum.repos.d/base.repo
-  notify: yum-update-cache
-
-- name: Yum - re-create repositories from templates (epel)
-  template:
-    src: epel.repo.j2
-    dest: /etc/yum.repos.d/epel.repo
-  notify: yum-update-cache
-
-- name: Yum - re-create repositories from templates (rpmfusion)
-  template:
-    src: rpmfusion.repo.j2
-    dest: /etc/yum.repos.d/rpmfusion.repo
+    src: "{{ item }}.repo.j2"
+    dest: "/etc/yum.repos.d/{{ item }}.repo"
+  with_items:
+    - base
+    - epel
+    - epel-testing
+    - rpmfusion
   notify: yum-update-cache
