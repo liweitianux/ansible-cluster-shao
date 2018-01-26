@@ -31,6 +31,8 @@ else
         "${PLAYBOOK}"
     echo "Bootstrapped the master machine!"
     ansible master -m ping
+    ansible master -m command -a whoami
+    ansible master -m command -a whoami -b
 fi
 
 #
@@ -50,5 +52,7 @@ else
         "${PLAYBOOK}"
     echo "Bootstrapped the nodes!"
     ansible nodes -m ping
+    ansible nodes -m command -a whoami
+    ansible nodes -m command -a whoami -b
 fi
 
