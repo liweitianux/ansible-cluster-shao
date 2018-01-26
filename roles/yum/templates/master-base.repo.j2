@@ -1,0 +1,26 @@
+[base]
+name=CentOS-$releasever - Base
+baseurl={{ yum_repo_baseurl }}/centos/$releasever/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+# released updates
+[updates]
+name=CentOS-$releasever - Updates
+baseurl={{ yum_repo_baseurl }}/centos/$releasever/updates/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+# additional packages that may be useful
+[extras]
+name=CentOS-$releasever - Extras
+baseurl={{ yum_repo_baseurl }}/centos/$releasever/extras/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+# additional packages that extend functionality of existing packages
+[centosplus]
+name=CentOS-$releasever - Plus
+baseurl={{ yum_repo_baseurl }}/centos/$releasever/centosplus/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7

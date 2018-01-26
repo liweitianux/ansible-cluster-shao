@@ -1,0 +1,23 @@
+[rpmfusion-free-updates]
+name=RPM Fusion for EL $releasever - Free - Updates
+baseurl={{ yum_repo_baseurl }}/rpmfusion/free/el/updates/$releasever/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-7
+
+[rpmfusion-free-updates-testing]
+name=RPM Fusion for EL $releasever - Free - Test Updates
+baseurl={{ yum_repo_baseurl }}/rpmfusion/free/el/updates/testing/$releasever/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-7
+
+[rpmfusion-nonfree-updates]
+name=RPM Fusion for EL $releasever - Nonfree - Updates
+baseurl={{ yum_repo_baseurl }}/rpmfusion/nonfree/el/updates/$releasever/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-el-7
+
+[rpmfusion-nonfree-updates-testing]
+name=RPM Fusion for EL $releasever - Nonfree - Test Updates
+baseurl={{ yum_repo_baseurl }}/rpmfusion/nonfree/el/updates/testing/$releasever/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-el-7

@@ -1,0 +1,9 @@
+---
+- name: Setup the master machine ...
+  hosts: master
+  become: true
+
+  roles:
+    - yum
+
+# vim: set ft=yaml sw=2: #

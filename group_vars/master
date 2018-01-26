@@ -1,2 +1,9 @@
+---
+cluster_role: master
 ansible_ssh_private_key_file: ssh/master.key
 ansible_ssh_public_key_file: ssh/master.key.pub
+
+# Yum repo mirror base URL
+yum_repo_baseurl: https://mirrors.ustc.edu.cn
+
+# vim: set ft=yaml sw=2: #

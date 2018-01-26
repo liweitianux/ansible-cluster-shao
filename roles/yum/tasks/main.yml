@@ -1,0 +1,80 @@
+---
+- debug: var=groups
+- debug: var=group_names
+- debug: var=cluster_role
+
+- name: Yum - disable fastestmirror plugin
+  lineinfile:
+    path: /etc/yum/pluginconf.d/fastestmirror.conf
+    regexp: "^enabled="
+    line: "enabled=0"
+
+- name: Yum - disable langpacks plugin
+  lineinfile:
+    path: /etc/yum/pluginconf.d/langpacks.conf
+    regexp: "^enabled="
+    line: "enabled=0"
+
+- name: Yum - install EPEL repos
+  yum:
+    name: epel-release
+    state: present
+  notify: update yum cache
+
+- name: Check if rpmfusion-free-release is installed
+  yum:
+    list: rpmfusion-free-release
+  register: pkg
+
+- debug: var=pkg
+
+- name: Yum - install RPM Fusion (free) repo
+  yum:
+    name: "https://download1.rpmfusion.org/free/el/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+    disable_gpg_check: true
+  when: pkg.results[0].yumstate != "installed"
+
+- name: Check if rpmfusion-nonfree-release is installed
+  yum:
+    list: rpmfusion-nonfree-release
+  register: pkg
+
+- name: Yum - install RPM Fusion (nonfree) repo
+  yum:
+    name: "https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+    disable_gpg_check: true
+  when: pkg.results[0].yumstate != "installed"
+
+- name: Check if yum.repos.d.bak exists
+  stat:
+    path: /etc/yum.repos.d.bak
+  register: stat_result
+
+- name: Yum - Move to backup all existing repos
+  command: mv /etc/yum.repos.d /etc/yum.repos.d.bak
+  when: stat_result.stat.exists == False
+
+- name: Yum - create repos directory
+  file:
+    path: /etc/yum.repos.d
+    state: directory
+
+- name: Yum - re-create repositories from templates (base)
+  template:
+    src: "{{ cluster_role }}-base.repo.j2"
+    dest: "/etc/yum.repos.d/{{ cluster_role }}-base.repo"
+  notify: yum-update-cache
+
+- name: Yum - re-create repositories from templates (epel)
+  template:
+    src: "{{ cluster_role }}-epel.repo.j2"
+    dest: "/etc/yum.repos.d/{{ cluster_role }}-epel.repo"
+  notify: yum-update-cache
+
+- name: Yum - re-create repositories from templates (rpmfusion)
+  template:
+    src: "{{ cluster_role }}-rpmfusion.repo.j2"
+    dest: "/etc/yum.repos.d/{{ cluster_role }}-rpmfusion.repo"
+  notify: yum-update-cache
