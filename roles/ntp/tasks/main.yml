@@ -1,0 +1,33 @@
+---
+- name: install chrony package
+  yum:
+    name: chrony
+    state: latest
+
+- name: enable chronyd service
+  service:
+    name: chronyd
+    enabled: true
+
+- name: setup chrony server on master
+  lineinfile:
+    path: /etc/chrony.conf
+    regexp: '^#allow\s+'
+    line: "allow {{ lan_net }}"
+  when: cluster_role == "master"
+  notify: chrony-restart
+
+- name: setup chrony client on nodes (1/2)
+  replace:
+    path: /etc/chrony.conf
+    regexp: '^(server\s+.*)$'
+    replace: '#\1'
+  when: cluster_role == "node"
+
+- name: setup chrony client on nodes (2/2)
+  lineinfile:
+    path: /etc/chrony.conf
+    regexp: "^server master iburst"
+    line: "server master iburst"
+  when: cluster_role == "node"
+  notify: chrony-restart

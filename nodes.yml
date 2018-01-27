@@ -8,5 +8,6 @@
     - selinux
     - firewall
     - yum
+    - ntp
 
 # vim: set ft=yaml sw=2: #

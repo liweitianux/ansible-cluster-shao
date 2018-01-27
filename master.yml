@@ -7,5 +7,6 @@
     - firewall
     - yum
     - nginx
+    - ntp
 
 # vim: set ft=yaml sw=2: #
