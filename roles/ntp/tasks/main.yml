@@ -20,14 +20,13 @@
 - name: setup chrony client on nodes (1/2)
   replace:
     path: /etc/chrony.conf
-    regexp: '^(server\s+.*)$'
+    regexp: '^(server\s+.*pool\.ntp\.org\s+.*)$'
     replace: '#\1'
   when: cluster_role == "node"
 
 - name: setup chrony client on nodes (2/2)
   lineinfile:
     path: /etc/chrony.conf
-    regexp: "^server master iburst"
     line: "server master iburst"
   when: cluster_role == "node"
   notify: chrony-restart
