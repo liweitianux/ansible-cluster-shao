@@ -1,0 +1,11 @@
+---
+- name: disable SELinux on nodes (until reboot)
+  command: setenforce 0
+  when: cluster_role == "node"
+
+- name: disable SELinux on nodes (for next boot)
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: "^SELINUX="
+    line: "SELINUX=disabled"
+  when: cluster_role == "node"
