@@ -4,6 +4,11 @@
     name: nginx
     state: latest
 
+- name: nginx - enable service
+  service:
+    name: nginx
+    enabled: true
+
 - name: nginx - copy config for repo proxy
   copy:
     src: repo-proxy.conf
