@@ -20,6 +20,7 @@
     name: "{{ deploy_user }}"
     state: present
     createhome: true
+    home: "/var/{{ deploy_user }}"
 
 - name: SSH - authorized_keys for the deployment user
   authorized_key:
