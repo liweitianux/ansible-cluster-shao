@@ -1,11 +1,16 @@
-<h1 id="ansible-playbook-to-manager-the-shao-cluster">Ansible Playbook to Manager the SHAO Cluster</h1>
+<h1 id="ansible-playbooks-to-manager-the-shao-cluster">Ansible Playbooks to Manager the SHAO Cluster</h1>
 <p>Weitian LI, 2018-01-25</p>
 <p><em>NOTE</em>: Install <code>cowsay</code> for an awesome Ansible experience!</p>
 <h2 id="a.-create-deploy-user">A. Create Deploy User</h2>
-<p><em>The easy way:</em></p>
-<pre><code>control$ sh bootstrap.sh</code></pre>
-<hr />
-<p><em>The hard way:</em></p>
+<h3 id="the-easy-way">The easy way:</h3>
+<pre class="shell"><code>control$ sh bootstrap.sh</code></pre>
+<p>Or to bootstrap the <em>master</em> machine:</p>
+<pre class="shell"><code>control$ ansible-playbook --verbose --diff --ask-pass --ask-become-pass \
+         --extra-vars &quot;bootstrap_host=master&quot; bootstrap.yml</code></pre>
+<p>Or to bootstrap one of the node machines, e.g., <em>gpu1</em>:</p>
+<pre class="shell"><code>control$ ansible-playbook --verbose --diff --ask-pass --ask-become-pass \
+         --limit gpu1 bootstrap.yml</code></pre>
+<h3 id="the-hard-way">The hard way:</h3>
 <ol style="list-style-type: decimal">
 <li>Add a new user <code>ansible</code>:</li>
 </ol>

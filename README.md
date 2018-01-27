@@ -1,5 +1,5 @@
-Ansible Playbook to Manager the SHAO Cluster
-============================================
+Ansible Playbooks to Manager the SHAO Cluster
+=============================================
 
 Weitian LI, 2018-01-25
 
@@ -9,15 +9,27 @@ Install `cowsay` for an awesome Ansible experience!
 
 A. Create Deploy User
 ---------------------
-*The easy way:*
+### The easy way:
 
-```
+```shell
 control$ sh bootstrap.sh
 ```
 
----
+Or to bootstrap the *master* machine:
 
-*The hard way:*
+```shell
+control$ ansible-playbook --verbose --diff --ask-pass --ask-become-pass \
+         --extra-vars "bootstrap_host=master" bootstrap.yml
+```
+
+Or to bootstrap one of the node machines, e.g., *gpu1*:
+
+```shell
+control$ ansible-playbook --verbose --diff --ask-pass --ask-become-pass \
+         --limit gpu1 bootstrap.yml
+```
+
+### The hard way:
 
 1. Add a new user `ansible`:
 
