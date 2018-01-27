@@ -13,11 +13,13 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-el-7
 [rpmfusion-nonfree-updates]
 name=RPM Fusion for EL $releasever - Nonfree - Updates
 baseurl={{ yum_repo_baseurl }}/rpmfusion/nonfree/el/updates/$releasever/$basearch/
+enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-el-7
 
 [rpmfusion-nonfree-updates-testing]
 name=RPM Fusion for EL $releasever - Nonfree - Test Updates
 baseurl={{ yum_repo_baseurl }}/rpmfusion/nonfree/el/updates/testing/$releasever/$basearch/
+enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-el-7
