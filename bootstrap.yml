@@ -12,5 +12,6 @@
 
   roles:
     - bootstrap
+    - selinux
 
 # vim: set ft=yaml sw=2: #

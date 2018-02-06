@@ -21,6 +21,7 @@
     state: present
     createhome: true
     home: "/var/{{ deploy_user }}"
+    seuser: true
 
 - name: SSH - authorized_keys for the deployment user
   authorized_key:
